@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* General CSS */
+html{ min-height:100%;position:relative;}
+body{ font-size:15px; background:#F1EDC8;  }
+hr{ height:1px; border-color:#9E7149;margin: 25px 0;width: 80%;}
+img{ max-width:100%;}
+#wrapper{}
+#wrapper-header{ background:#E8E2BE; padding:30px 0;}
+#wrapper-content{ margin-top:35px;}
+#wrapper-content p{margin:10px 0; text-align:justify;}
+
+#wrapper-slider span{ display: block; color:#6c6c6c;}
+span.date { text-align:left;}
+span.source { text-align:right;}
+
+#heading{ position:absolute; top:-70px; left:0; z-index:10; }
+#stats{}
+#infections{ text-align:right;}
+#infections #country{ border-right: 1px solid #be2135; padding-right: 55px;}
+#stats .numb{ font-family:"Open Sans Bold"; font-size:90px; line-height: 100px;}
+
+#wrapper-countries{ padding:0;}
+#wrapper-countries .title{ color:#FFF; background:#be2135; margin-bottom: 10px; padding: 5px 15px;}
+#wrapper-countries li{ list-style:none; border-bottom: 1px solid #b5b08c; color: #b5b08c; line-height: 30px;}
+#wrapper-countries li:hover, #wrapper-countries li.active{ cursor:pointer; color:#BE2135;}
+#wrapper-countries li span{ float:right;}
+#wrapper-stats{ margin-top:10px;}
+#wrapper-stats .numb{ font-size:42px; margin-bottom: -10px; min-height: 60px;}
+#wrapper-stats .label{ padding:0; font-size: 16px;}
+
+#wrapper-persons{ margin-top:30px;}
+
+#medic{ position:absolute; bottom:0; right:0; height:auto; width: 25%;}
+
+.bx-viewport{ margin-top:30px;}
+.bx-controls{ position:absolute; right:15px; z-index:100; top:0px;}
+.bx-controls a{ display:inline-block; text-indent: 100%;
+white-space: nowrap;
+overflow: hidden;}
+.bx-controls .bx-prev{ background:url(../images/up.png) no-repeat center center; width:25px; height:25px;}
+.bx-controls .bx-next{ background:url(../images/down.png) no-repeat center center; width:25px; height:25px;}
+
+#wrapper-piechart{ text-align:center;}
+
+/* SVG CSS */
+/*g{ fill:#353333;}*/
+path, circle{ /*stroke:#FFF;*/}
+text{ fill:#3C1A13; }
+text.perc{font-size:45px }
+rect{ fill:#f75b49;}
+rect.bg{fill:#2c251b; stroke:#706047; stroke-width:0.5px; display:none;}

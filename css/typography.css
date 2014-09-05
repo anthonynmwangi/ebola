@@ -1,0 +1,12 @@
+/* FONT RULES */
+@font-face {font-family: 'Open Sans';src: url('../fonts/OpenSans-Regular.ttf');}
+@font-face {font-family: 'Open Sans Bold';src: url('../fonts/OpenSans-Bold.ttf');}
+body, .label{ color:#3C1A13; font-family:Lato; }
+
+h1, h2, h3, h4, #title { font-family:"Open Sans Bold"; font-weight:bold; }
+h1{font-size: 42px; }
+label { font-family: AmaticSC; font-size: 18px; text-transform: uppercase; color:#8f4520; }
+
+.dropdown-menu li a{  font-size: 17px; margin: 5px 0; }
+
+body{ font-family:Lato;}

@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* General CSS */
+html{ min-height:100%;position:relative;}
+body{ font-size:16px; background: url(../images/bg.jpg) center top repeat; }
+hr{ width:100%; height:1px; border-color:#403728; margin-top:0;}
+img{ max-width:100%;}
+#wrapper{ margin:20px auto;}
+#wrapper-content{ box-shadow: 5px 3px 8px #353333; padding:30px 20px 15px; position:relative; background:#262626; margin-top:100px;}
+#wrapper-content p{margin:10px 0; text-align:justify;}
+
+#wrapper-content span{ display: block; color:#6c6c6c;}
+span.date { text-align:left;}
+span.source { text-align:right;}
+
+#heading{ position:absolute; top:-70px; left:0; z-index:10; }
+#stats{}
+#stats .numb{ font-family:"Open Sans Bold"; font-size:90px; line-height: 100px;}
+
+#wrapper-countries{}
+#wrapper-countries li{ list-style:none; color:#353333;}
+#wrapper-countries li:hover, #wrapper-countries li.active{ cursor:pointer; color:#FFF;}
+
+#wrapper-stats{ margin-top:10px;}
+#wrapper-stats .numb{ font-size:42px; margin-bottom: -10px; text-shadow:3px 2px 3px #353333; min-height: 60px;}
+#wrapper-stats .label{ padding:0; font-size: 16px;}
+
+#medic{ position:absolute; bottom:0; right:0; width:400px; height:auto;}
+
+
+.bx-controls{ position:absolute; right:-75px; z-index:100; top:20px;}
+.bx-controls a{ display:block; text-indent: 100%;
+white-space: nowrap;
+overflow: hidden;}
+.bx-controls .bx-prev{ background:url(../images/up.png) no-repeat center center; width:25px; height:25px;}
+.bx-controls .bx-next{ background:url(../images/down.png) no-repeat center center; width:25px; height:25px;}
+
+/* SVG CSS */
+/*g{ fill:#353333;}*/
+path, circle{ /*stroke:#FFF;*/}
+text{ fill:#FFF; }
+text.perc{font-size:45px }
+rect{ fill:#f75b49;}
+rect.bg{fill:#2c251b; stroke:#706047; stroke-width:0.5px; display:none;}

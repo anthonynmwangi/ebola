@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="application/json">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ebola outbreak in West Africa</title>
+<!--<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>-->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/typography.css" type="text/css" rel="stylesheet">
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<link href="css/custom-responsive.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/d3.v3.min.js"></script>
+<!-- bxSlider Javascript file -->
+<script src="js/jquery.bxslider.min.js"></script>
+</head>
+<body>
+<div id="wrapper" class="container">
+	<div id="wrapper-content">
+		<h1 id="heading">Ebola Infections 2014</h1>
+		<div class="row">
+			<div class="col-sm-3">
+				<div id="wrapper-piechart"></div> 
+			</div>
+			<div class="col-sm-7">
+				<ul id="wrapper-slider" class="list-unstyled cycle-slideshow" 
+                                      data-cycle-slides="> li"
+                                     data-cycle-fx="scrollVert"
+                                      data-cycle-prev="#prev"
+                                      data-cycle-next="#next"
+                                      data-cycle-timeout=10000>
+                                      
+				</ul>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-sm-3">
+				<ul id="wrapper-countries"></ul>
+			</div>
+			<div class="col-sm-7">
+				<div id="wrapper-persons"></div>
+			</div>
+		 </div>
+	</div>
+	<div id="wrapper-footer">
+		<div id="wrapper-stats">
+			<div id="infections" class="row">
+				<div id="country" class="col-sm-3">
+					<div class="numb">-</div>
+					<div class="label">Country Infections</div>
+				</div>
+				<div id="total" class="col-sm-3">
+					<div class="numb">1,830</div>
+					<div class="label">Total Infections</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><img id="medic" src="images/medic.png">
+<script type="text/javascript">
+var url = "http://api.crisis.net/item?apikey=53e079e126102d463f4b01e6&text=ebola&limit=1000";
+d3.json(url, function(error, json) {
+  if (error) return console.warn(error);
+
+var data; // a global
+var countries = new Array();
+data = json.data;
+var exists;	// check if country already on list
+var totalAffected=0;
+
+for(var count in data)
+{
+	if(data[count].source == "who"){
+		
+		if(countries.length){
+			for(var i = 0; i < countries.length; i++) {
+			   if(countries[i].country === data[count].geo.addressComponents.adminArea1) {
+				   exists = 1;
+			   }
+			}
+			if(!exists){
+				   countries.push({country:data[count].geo.addressComponents.adminArea1,id:count});
+				   totalAffected=totalAffected+data[count].totalAffectedPersons;
+			   }
+			    exists = 0;
+
+		}else{
+			   countries.push({country:data[count].geo.addressComponents.adminArea1,id:count});
+			   totalAffected=totalAffected+data[count].totalAffectedPersons;
+		}
+	}
+}
+
+				
+//Draw Pie Chart
+var w = 200;
+var h = 200;
+var dataset = [ 25, 15, 20, 45 ];
+var outerRadius = w / 2;
+var innerRadius = w / 2.3;
+
+var arc = d3.svg.arc()
+			.innerRadius(innerRadius)
+			.outerRadius(outerRadius);
+			
+var pie = d3.layout.pie()
+			.sort(null)
+			.value(function(d) { return data[d.id].totalAffectedPersons; });
+			
+//Easy colors accessible via a 10-step ordinal scale
+var color = d3.scale.category20c();
+
+//Create SVG element
+var svgPie = d3.select("#wrapper-piechart")
+			.append("svg")
+			.attr("class", "pie")
+			.attr("width", w)
+			.attr("height", h);
+			
+var pieChart = svgPie.append("g")
+			
+//Set up Pie Chart
+var arcs = pieChart.selectAll("path")
+			.data(pie(countries))
+			.enter()
+			.append("path")
+			.attr("transform", "translate(" + outerRadius + "," + outerRadius + ")")
+			.attr("fill", "#3182bd")
+			.attr("d", arc);
+
+//Pie Chart Label
+var perc = svgPie.append("text")
+	.attr("class", "perc")
+	.attr("transform", "translate(" + outerRadius + "," + outerRadius*1.15 + ")")
+	.attr("text-anchor", "middle")
+	.text("100%");
+	
+// List of countries using Jquery
+$.each(countries, function(index, value){
+	$("#wrapper-countries").append('<li id="'+value.id+'">'+value.country+'</li>')			
+})
+
+$.each(data, function(i, item) {
+	//alert(JSON.stringify(item.source));
+	var issueLink;
+	var issueDate = new Date(data[i].publishedAt);
+	var summary = unescape(item.summary);
+	summary = summary.substring(0, 400);
+	
+	if(item.fromURL){ issueLink = '<a target="_blank" href="'+item.fromURL+'">read more</a>'; }else{ issueLink ='';}
+	
+	var formatedSummary = '<li>';
+	formatedSummary+= '<span class="date">'+issueDate.getDate()+'/'+issueDate.getMonth()+1+'/'+issueDate.getFullYear()+'</span>';
+	formatedSummary+= '<p>'+summary+'... '+issueLink+'<p>';
+	formatedSummary+= '<span class="source">- '+item.source+'</span>';
+	formatedSummary+= '</li>';
+	
+	$("#wrapper-slider").append(formatedSummary);
+    return i<5;
+});
+$('#wrapper-slider').bxSlider({
+	 mode: 'vertical',
+	 auto: true,
+	 pager: false,
+});
+
+//Populate the content
+$("#infections #total .numb").text(totalAffected);
+//$(".date").text("Date: "+latestMonth.getDate()+"/"+latestMonth.getMonth()+"/"+latestMonth.getFullYear() );
+
+$("#wrapper-countries li").click(function () { 
+	$("#wrapper-countries li").removeClass("active");  // remove active class from all
+	$(this).addClass("active");         // add active class to clicked element
+	countrySelect(this.id); 
+});
+
+//Draw Persons
+arrayPersons = new Array();
+for(i=0; i<20; i++){ arrayPersons.push(i); }
+
+var svgPersons = d3.select("#wrapper-persons")
+			.append("svg")
+			.attr("class", "persons")
+			.attr("width", 800)
+			.attr("height", 100)
+			
+var svgPerson = svgPersons.selectAll("g")
+		.data(arrayPersons)
+		.enter()
+		.append("g")
+		.attr("fill", "#353333")
+		.attr("transform", function(d, i) {
+				return "translate("+i*30+"," + 0 + ") scale(0.30)";
+		})		
+	svgPerson.append("circle")
+		.attr("cx", 51.774)
+		.attr("cy", 23.925)
+		.attr("r", 20.38)		
+	svgPerson.append("path")
+		.attr("d", "M30.28,50.034c-14.34,0-25.873,11.863-25.873,26.658v63.063c0,12.261,17.69,12.261,17.69,0V82.091h4.188 v159.778c0,16.393,23.557,15.91,23.557,0v-93.54H53.9v93.54c0,15.91,23.687,16.393,23.687,0V82.091h4.09v57.664 c0,12.355,17.598,12.354,17.566,0V77.069c0-13.644-10.446-27.007-26.191-27.007L30.28,50.034z")
+
+
+//Country Select
+function countrySelect(current){
+    //alert(JSON.stringify(obj));
+	arcs.each(function(d, i){
+		currentArc = d3.select(this).transition().duration(1000);
+		if(d.data.id!=current){
+			currentArc.attr("fill", "#353333");
+		}else{
+			currentArc.attr("fill", "#3182bd")
+		}
+	})
+	currentPerc = Math.round((data[current].totalAffectedPersons * 100)/totalAffected);
+	perc.text(currentPerc+"%");
+
+	svgPerson.each(function(d, i) {
+		var currentPerson = d3.select(this).transition().duration(500);
+		if(i< Math.round(currentPerc*20/100))
+		{
+			currentPerson.attr("fill", "#3182bd")
+		}else{
+			currentPerson.attr("fill", "#353333")
+		}
+	})
+
+	$("#infections #country .numb").text(data[current].totalAffectedPersons);
+}
+});
+</script>
+</body>
+</html>
